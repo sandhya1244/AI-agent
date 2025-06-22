@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Travel Agent</title>
+ <style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    padding: 40px;
+  }
+
+  .container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  textarea, button {
+    width: 100%;
+    font-size: 1em;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  button {
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #0056b3;
+  }
+
+  .response {
+    margin-top: 20px;
+    background: #fefefe;
+    padding: 20px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+    font-family: 'Courier New', Consolas, monospace;
+    font-size: 0.85em;
+    line-height: 1.5em;
+    max-height: 300px;
+    overflow-y: auto;
+    border-left: 4px solid #007bff;
+    border-top: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #f9f9f9;
+  }
+</style>
+
+</head>
+<body>
+  <div class="container">
+    <h2>🌍 AI Travel Assistant</h2>
+    <textarea id="userInput" rows="4" placeholder="Plan a 3-day trip to Paris..."></textarea>
+    <button onclick="sendMessage()">Ask</button>
+    <pre id="responseBox" class="response">Your travel plan will appear here...</pre>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const message = document.getElementById("userInput").value;
+      const responseBox = document.getElementById("responseBox");
+      responseBox.textContent = "Thinking...";
+
+      try {
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message }),
+        });
+
+        const data = await res.json();
+        responseBox.textContent = data.response;
+      } catch (err) {
+        responseBox.textContent = "Error fetching response.";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
